@@ -1,25 +1,31 @@
-import fetch from "@src/utils/fetch";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import { pool } from "@src/utils/db";
 
 type Props = {
   id: string;
+  title: string;
 };
 
-export default function Sheet({ id }: Props) {
+export default function Sheet({ id, title }: Props) {
   const router = useRouter();
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  return <div>Show sheet {id}</div>;
+  return (
+    <div>
+      Show sheet {id}: {title}
+    </div>
+  );
 }
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  const res = await fetch("/api/sheets/");
-  const sheets = await res.json();
+  const [sheets] = await pool.execute<any[]>(
+    "select id from notes order by updated_at DESC"
+  );
 
   // Get the paths we want to pre-render based on posts
   const paths = sheets.map((sheet) => ({
@@ -31,9 +37,12 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await fetch(`/api/sheets/${params.id}`);
+  const [res] = await pool.execute(
+    "select * from notes where id = ? LIMIT 1;",
+    [params.id]
+  );
 
-  if (res.status === 404) {
+  if (Array.isArray(res) && res.length === 0) {
     return {
       redirect: {
         destination: `/`,
@@ -41,13 +50,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
     };
   }
-  const data = await res.json();
-
-  console.log(data);
 
   return {
     props: {
-      id: params.id,
+      id: res[0].id,
+      title: res[0].title,
     },
   };
 };

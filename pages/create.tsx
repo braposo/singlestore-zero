@@ -1,4 +1,4 @@
-import fetch from "@src/utils/fetch";
+import { pool } from "@src/utils/db";
 import { GetStaticProps } from "next";
 
 export default function Create() {
@@ -6,13 +6,14 @@ export default function Create() {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch("/api/create");
-  const data = await res.json();
+  const [rows] = await pool.execute(
+    "select id from notes order by rand() LIMIT 1"
+  );
 
-  if (data.id) {
+  if (rows[0].id) {
     return {
       redirect: {
-        destination: `/s/${data.id}`,
+        destination: `/s/${rows[0].id}`,
         permanent: false,
       },
     };
