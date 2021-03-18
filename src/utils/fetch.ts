@@ -1,3 +1,2 @@
-const endpoint = process.env.ENDPOINT;
-
-export default (url: string) => fetch(`${endpoint}${url}`);
+export const fetcher = (input: RequestInfo, init?: RequestInit) =>
+    fetch(input, init).then((res) => res.json());

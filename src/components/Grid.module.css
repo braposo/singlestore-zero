@@ -1,0 +1,12 @@
+.wrapper {
+    width: 80vw;
+    margin: auto;
+}
+
+.table {
+    width: 100%;
+}
+
+.table .editing {
+    padding: 0;
+}
