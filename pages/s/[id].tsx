@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { pool } from "@src/utils/db";
@@ -72,6 +73,10 @@ export default function Sheet({ rows, tableID }: Props) {
 
     return (
         <div>
+            <Head>
+                <title>SingleStore Zero - {tableID.split("_").join(" ")}</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <h1>Start editing!</h1>
             <p>
                 <button onClick={handleAddRow}>Add row</button>
