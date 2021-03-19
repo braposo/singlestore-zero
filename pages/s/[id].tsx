@@ -38,9 +38,27 @@ export default function Sheet({ rows, tableID }: Props) {
         });
     };
 
+    const handleAddRow = async () => {
+        await fetcher(`/api/sheets/${tableID}/addRow`, {
+            method: "POST",
+        });
+
+        mutate(`/api/sheets/${tableID}`);
+    };
+
+    const handleAddColumn = async () => {
+        await fetcher(`/api/sheets/${tableID}/addColumn`, {
+            method: "POST",
+        });
+
+        mutate(`/api/sheets/${tableID}`);
+    };
+
     return (
         <div>
-            <h1>Title</h1>
+            <h1>Start editing!</h1>
+            <button onClick={handleAddRow}>Add row</button>
+            <button onClick={handleAddColumn}>Add column</button>
             <Grid data={data} onChange={handleChange} />
         </div>
     );

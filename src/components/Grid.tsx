@@ -10,7 +10,7 @@ const buildGrid = (rows) => {
         const entries = Object.entries(cols);
 
         const values = entries.map(([name, value]) => {
-            return { value, name, id, readOnly: isFirstRow ? true : false };
+            return { value, name, id, isHeader: isFirstRow ? true : false };
         });
 
         return [{ value: isFirstRow ? "" : index, readOnly: true }, ...values];
@@ -19,7 +19,7 @@ const buildGrid = (rows) => {
 
 type Props = {
     data: any;
-    onChange;
+    onChange: ReactDataSheet.CellsChangedHandler<any, string>;
 };
 
 export function Grid({ data, onChange }: Props) {
