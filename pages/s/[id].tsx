@@ -54,11 +54,31 @@ export default function Sheet({ rows, tableID }: Props) {
         mutate(`/api/sheets/${tableID}`);
     };
 
+    const handleRemoveRow = async () => {
+        await fetcher(`/api/sheets/${tableID}/removeRow`, {
+            method: "POST",
+        });
+
+        mutate(`/api/sheets/${tableID}`);
+    };
+
+    const handleRemoveColumn = async () => {
+        await fetcher(`/api/sheets/${tableID}/removeColumn`, {
+            method: "POST",
+        });
+
+        mutate(`/api/sheets/${tableID}`);
+    };
+
     return (
         <div>
             <h1>Start editing!</h1>
-            <button onClick={handleAddRow}>Add row</button>
-            <button onClick={handleAddColumn}>Add column</button>
+            <p>
+                <button onClick={handleAddRow}>Add row</button>
+                <button onClick={handleAddColumn}>Add column</button>
+                <button onClick={handleRemoveRow}>Remove row</button>
+                <button onClick={handleRemoveColumn}>Remove column</button>
+            </p>
             <Grid data={data} onChange={handleChange} />
         </div>
     );
