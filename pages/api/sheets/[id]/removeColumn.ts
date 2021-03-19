@@ -14,15 +14,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const colCount = row[0].column_count;
         const colName = `col${colCount}`;
 
-        await pool.execute(
-            `ALTER TABLE ${req.query.id} DROP COLUMN ${colName};`
-        );
+        if (colCount > 1) {
+            await pool.execute(
+                `ALTER TABLE ${req.query.id} DROP COLUMN ${colName};`
+            );
 
-        await pool.execute(
-            `UPDATE sheet_schema SET column_count = ${
-                colCount - 1
-            } WHERE table_id = '${req.query.id}';`
-        );
+            await pool.execute(
+                `UPDATE sheet_schema SET column_count = ${
+                    colCount - 1
+                } WHERE table_id = '${req.query.id}';`
+            );
+        }
         console.timeEnd("remove column to table");
 
         return res.status(200).json({ success: true });
