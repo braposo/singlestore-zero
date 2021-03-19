@@ -14,7 +14,7 @@ type Props = {
 
 export default function Sheet({ rows, tableID }: Props) {
     const router = useRouter();
-    const { data } = useSWR(`/api/sheets/${tableID}`, fetcher, {
+    const { data } = useSWR(`/api/private/${tableID}`, fetcher, {
         initialData: JSON.parse(rows),
     });
 
@@ -26,7 +26,7 @@ export default function Sheet({ rows, tableID }: Props) {
         changes
     ) => {
         changes.forEach(async (change) => {
-            await fetcher(`/api/sheets/${tableID}`, {
+            await fetcher(`/api/private/${tableID}`, {
                 body: JSON.stringify({
                     name: change.cell.name,
                     value: change.value,
@@ -35,40 +35,40 @@ export default function Sheet({ rows, tableID }: Props) {
                 method: "PUT",
             });
 
-            mutate(`/api/sheets/${tableID}`);
+            mutate(`/api/private/${tableID}`);
         });
     };
 
     const handleAddRow = async () => {
-        await fetcher(`/api/sheets/${tableID}/addRow`, {
+        await fetcher(`/api/private/${tableID}/addRow`, {
             method: "POST",
         });
 
-        mutate(`/api/sheets/${tableID}`);
+        mutate(`/api/private/${tableID}`);
     };
 
     const handleAddColumn = async () => {
-        await fetcher(`/api/sheets/${tableID}/addColumn`, {
+        await fetcher(`/api/private/${tableID}/addColumn`, {
             method: "POST",
         });
 
-        mutate(`/api/sheets/${tableID}`);
+        mutate(`/api/private/${tableID}`);
     };
 
     const handleRemoveRow = async () => {
-        await fetcher(`/api/sheets/${tableID}/removeRow`, {
+        await fetcher(`/api/private/${tableID}/removeRow`, {
             method: "POST",
         });
 
-        mutate(`/api/sheets/${tableID}`);
+        mutate(`/api/private/${tableID}`);
     };
 
     const handleRemoveColumn = async () => {
-        await fetcher(`/api/sheets/${tableID}/removeColumn`, {
+        await fetcher(`/api/private/${tableID}/removeColumn`, {
             method: "POST",
         });
 
-        mutate(`/api/sheets/${tableID}`);
+        mutate(`/api/private/${tableID}`);
     };
 
     return (
