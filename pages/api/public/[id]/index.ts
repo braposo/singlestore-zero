@@ -51,7 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             `SELECT * FROM ${req.query.id} WHERE id = 1 LIMIT 1;`
         );
 
-        const insertedId = result.insertId;
+        const insertedId = (result as any).insertId;
 
         Object.entries(parsedBody).forEach(async ([key, value]) => {
             await pool.execute(
